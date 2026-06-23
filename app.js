@@ -4124,21 +4124,13 @@ const CONTENT = {
 
   // --- Квадратна функция y = ax² + bx + c ---
   g9t2s6: {
-    shortIntro: 'Общата квадратна функция y = ax² + bx + c има парабола, изместена спрямо началото. Важни са върхът, оста на симетрия и пресечните точки с осите.',
-    definitions: [
-      { term: 'Квадратна функция', def: 'Функция от вида <katex>y = ax^2 + bx + c</katex> (<katex>a \\neq 0</katex>). Графиката е парабола.' }
-    ],
-    formulas: [
-      { label: 'Абсциса на върха', tex: 'x_0 = -\\dfrac{b}{2a}' },
-      { label: 'Ордината на върха', tex: 'y_0 = -\\dfrac{D}{4a}' },
-      { label: 'Ос на симетрия', tex: 'x = -\\dfrac{b}{2a}' }
-    ],
-    drawing: { svg: `<svg viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg" style="max-width:300px;">
+    drawing: [
+      { svg: `<svg viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg" style="max-width:300px;">
   <line x1="10" y1="160" x2="294" y2="160" stroke="#94a3b8" stroke-width="1.2"/>
   <line x1="170" y1="6" x2="170" y2="274" stroke="#94a3b8" stroke-width="1.2"/>
   <path d="M294 160 l-6 -3 l0 6 z" fill="#94a3b8"/>
   <path d="M170 6 l-3 6 l6 0 z" fill="#94a3b8"/>
-  <text x="288" y="154" font-size="11" fill="#94a3b8">x</text>
+  <text x="286" y="154" font-size="11" fill="#94a3b8">x</text>
   <text x="176" y="14" font-size="11" fill="#94a3b8">y</text>
   <path d="M 126 50 L 132 84 L 138 115 L 144 143 L 150 168 L 156 189 L 162 207 L 168 222 L 174 233 L 180 242 L 186 246 L 192 248 L 198 246 L 204 242 L 210 233 L 216 222 L 222 207 L 228 189 L 234 168 L 240 143 L 246 115 L 252 84 L 258 50" fill="none" stroke="#4f6ef7" stroke-width="2.5"/>
   <circle cx="192" cy="248" r="4" fill="#e84393"/>
@@ -4150,15 +4142,49 @@ const CONTENT = {
   <text x="120" y="155" font-size="10" fill="#f59e0b">нули</text>
   <text x="40" y="250" font-size="11" fill="#4f6ef7" font-weight="600">y = ax² + bx + c</text>
 </svg>`, caption: 'Парабола y = ax² + bx + c: връх, ос на симетрия и нули.' },
+      { svg: `<svg viewBox="0 0 360 235" xmlns="http://www.w3.org/2000/svg" style="max-width:360px;">
+  <text x="60" y="14" font-size="11" fill="#1a1f2e" text-anchor="middle" font-weight="600">D &gt; 0</text>
+  <text x="175" y="14" font-size="11" fill="#1a1f2e" text-anchor="middle" font-weight="600">D = 0</text>
+  <text x="290" y="14" font-size="11" fill="#1a1f2e" text-anchor="middle" font-weight="600">D &lt; 0</text>
+  <text x="14" y="62" font-size="11" fill="#4f6ef7" font-weight="700">a&gt;0</text>
+  <text x="14" y="169" font-size="11" fill="#e84393" font-weight="700">a&lt;0</text>
+  <line x1="28" y1="58" x2="338" y2="58" stroke="#cbd5e1" stroke-width="1"/>
+  <line x1="28" y1="165" x2="338" y2="165" stroke="#cbd5e1" stroke-width="1"/>
+  <path d="M 34 37 L 40 53 L 46 65 L 51 73 L 57 77 L 60 78 L 63 77 L 69 73 L 74 65 L 80 53 L 86 37" fill="none" stroke="#4f6ef7" stroke-width="2"/>
+  <circle cx="42" cy="58" r="2.5" fill="#10b981"/><circle cx="78" cy="58" r="2.5" fill="#10b981"/>
+  <path d="M 149 17 L 155 33 L 161 45 L 166 53 L 172 57 L 175 58 L 178 57 L 184 53 L 189 45 L 195 33 L 201 17" fill="none" stroke="#4f6ef7" stroke-width="2"/>
+  <circle cx="175" cy="58" r="3" fill="#10b981"/>
+  <path d="M 264 3 L 270 19 L 276 31 L 281 39 L 287 43 L 290 44 L 293 43 L 299 39 L 304 31 L 310 19 L 316 3" fill="none" stroke="#4f6ef7" stroke-width="2"/>
+  <path d="M 34 186 L 40 170 L 46 158 L 51 150 L 57 146 L 60 145 L 63 146 L 69 150 L 74 158 L 80 170 L 86 186" fill="none" stroke="#e84393" stroke-width="2"/>
+  <circle cx="42" cy="165" r="2.5" fill="#10b981"/><circle cx="78" cy="165" r="2.5" fill="#10b981"/>
+  <path d="M 149 206 L 155 190 L 161 178 L 166 170 L 172 166 L 175 165 L 178 166 L 184 170 L 189 178 L 195 190 L 201 206" fill="none" stroke="#e84393" stroke-width="2"/>
+  <circle cx="175" cy="165" r="3" fill="#10b981"/>
+  <path d="M 264 220 L 270 204 L 276 192 L 281 184 L 287 180 L 290 179 L 293 180 L 299 184 L 304 192 L 310 204 L 316 220" fill="none" stroke="#e84393" stroke-width="2"/>
+  <text x="183" y="232" font-size="10" fill="#64748b" text-anchor="middle">положение на параболата спрямо оста Ox</text>
+</svg>`, caption: 'Шестте случая за положението на параболата според a и D.' }
+    ],
+    shortIntro: 'Общата квадратна функция y = ax² + bx + c има парабола, изместена спрямо началото. Важни са върхът, оста на симетрия и пресечните точки с осите.',
+    definitions: [
+      { term: 'Квадратна функция', def: 'Функция от вида <katex>y = ax^2 + bx + c</katex> (<katex>a \\neq 0</katex>). Графиката е парабола.' }
+    ],
+    formulas: [
+      { label: 'Абсциса на върха', tex: 'x_0 = -\\dfrac{b}{2a}' },
+      { label: 'Ордината на върха', tex: 'y_0 = -\\dfrac{D}{4a}' },
+      { label: 'Ос на симетрия', tex: 'x = -\\dfrac{b}{2a}' },
+      { label: 'Дискриминанта', tex: 'D = b^2 - 4ac' }
+    ],
     algorithm: [
-      'Намери абсцисата на върха: <katex>x_0 = -\\dfrac{b}{2a}</katex>.',
-      'Намери ординатата: замести x₀ във функцията.',
-      'Оста на симетрия е вертикалната права през върха.',
-      'Намери нулите (пресичане с Ox), ако има.'
+      'Определи посоката: a > 0 → параболата се отваря нагоре; a < 0 → надолу.',
+      'Пресметни дискриминантата <katex>D = b^2 - 4ac</katex> — тя дава броя пресечни точки с Ox.',
+      'Намери върха: <katex>x_0 = -\\dfrac{b}{2a}</katex>, после <katex>y_0</katex> чрез заместване.',
+      'Начертай оста на симетрия — вертикалната права <katex>x = x_0</katex>.',
+      'Намери пресичането с Oy: точката <katex>(0;\\ c)</katex>.',
+      'Ако <katex>D \\geq 0</katex>, намери нулите (пресичане с Ox) от уравнението <katex>ax^2+bx+c=0</katex>.',
+      'Нанеси върха, пресечните точки и начертай схематично параболата.'
     ],
     example: {
-      problem: 'Намери върха на <katex>y = x^2 - 2x - 3</katex>.',
-      solution: '<katex>x_0 = -\\dfrac{-2}{2} = 1</katex><br><katex>y_0 = 1 - 2 - 3 = -4</katex><br>Връх: (1; −4).'
+      problem: 'Построй схематично графиката на <katex>y = x^2 - 2x - 3</katex>.',
+      solution: 'a = 1 > 0 → нагоре. <katex>D = 4 + 12 = 16 > 0</katex> → 2 нули.<br>Връх: <katex>x_0 = 1</katex>, <katex>y_0 = -4</katex> → (1; −4).<br>С Oy: (0; −3). Нули: x = −1 и x = 3.<br>Парабола нагоре с връх (1; −4), минаваща през (−1; 0) и (3; 0).'
     },
     mistakes: [
       { label: 'Знак на x₀', text: 'Абсцисата на върха е −b/(2a) — внимавай със знака на b.' }
@@ -4171,8 +4197,21 @@ const CONTENT = {
         feedback: 'x₀ = −(−4)/2 = 2.'
       }
     ],
-    remember: 'Връх: <katex>x_0 = -\\dfrac{b}{2a}</katex>. Оста на симетрия минава през върха.'
+    table: {
+      title: 'Положение на параболата според a и D',
+      headers: ['a', 'D', 'Отваря се', 'Пресича Ox', 'Връх спрямо Ox'],
+      rows: [
+        ['a > 0', 'D > 0', 'нагоре', 'в 2 точки', 'под Ox'],
+        ['a > 0', 'D = 0', 'нагоре', 'в 1 точка (допира)', 'на Ox'],
+        ['a > 0', 'D < 0', 'нагоре', 'не пресича', 'над Ox (цялата над)'],
+        ['a < 0', 'D > 0', 'надолу', 'в 2 точки', 'над Ox'],
+        ['a < 0', 'D = 0', 'надолу', 'в 1 точка (допира)', 'на Ox'],
+        ['a < 0', 'D < 0', 'надолу', 'не пресича', 'под Ox (цялата под)']
+      ]
+    },
+    remember: 'Връх: <katex>x_0 = -\\dfrac{b}{2a}</katex>. Посоката зависи от a, броят пресичания с Ox — от D.'
   },
+
 
   // --- Връх и ос на симетрия на парабола ---
   g9t2s7: {
