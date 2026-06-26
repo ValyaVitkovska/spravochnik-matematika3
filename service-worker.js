@@ -1,6 +1,6 @@
 // Математически справочник — Service Worker
 // Версия на кеша — увеличи при промяна на файловете
-const CACHE_NAME = 'math-handbook-v4';
+const CACHE_NAME = 'math-handbook-v5';
 
 // Файлове за кеширане при инсталация
 const PRECACHE_URLS = [
@@ -30,6 +30,11 @@ self.addEventListener('activate', event => {
       )
     ).then(() => self.clients.claim())
   );
+});
+
+// --- Съобщение от страницата: активирай новата версия веднага ---
+self.addEventListener('message', event => {
+  if (event.data === 'skip-waiting') self.skipWaiting();
 });
 
 // --- Fetch стратегия ---

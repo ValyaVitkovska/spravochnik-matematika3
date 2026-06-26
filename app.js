@@ -9743,7 +9743,27 @@ function updateThemeIcon(theme) {
 function registerSW() {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+      navigator.serviceWorker.register('./service-worker.js').then(reg => {
+        // Провери за нова версия при всяко зареждане
+        reg.update();
+        // Когато се намери нов service worker, активирай го веднага
+        reg.addEventListener('updatefound', () => {
+          const nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener('statechange', () => {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+              nw.postMessage && nw.postMessage('skip-waiting');
+            }
+          });
+        });
+      }).catch(() => {});
+      // При смяна на активния service worker презареди веднъж, за да се види новата версия
+      let refreshed = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshed) return;
+        refreshed = true;
+        window.location.reload();
+      });
     });
   }
 }
