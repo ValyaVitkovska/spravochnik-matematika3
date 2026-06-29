@@ -7762,7 +7762,6 @@ function renderHome(main) {
   ];
 
   let html = `
-    <img class="home-logo" src="./icons/logo-full.png" alt="Интерактивна математика — Валя Витковска">
     <div class="home-hero">
       <h1>Математически справочник<br>8.–12. клас</h1>
       <p>Формули, теореми, чертежи, графики и типови задачи</p>
@@ -7788,10 +7787,9 @@ function renderHome(main) {
   });
 
   html += `</div>`;
+  html += `<img class="home-logo" src="./icons/logo-full.png" alt="Интерактивна математика — Валя Витковска">`;
   main.innerHTML = html;
 }
-
-// --- Страница на клас ---
 function renderGrade(main) {
   const grade = HANDBOOK[state.gradeKey];
   if (!grade) return;
