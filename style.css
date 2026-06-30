@@ -1179,6 +1179,20 @@ body {
   height: 38px;
   opacity: 0.55;
 }
+.app-credits .credits-logo-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 50%;
+  line-height: 0;
+  transition: transform .15s ease, background .15s ease;
+}
+.app-credits .credits-logo-btn:hover {
+  background: var(--bg-secondary);
+  transform: translateY(-1px);
+}
+.app-credits .credits-logo-btn:hover .credits-logo { opacity: 0.9; }
 [data-theme="dark"] .app-credits .credits-logo { opacity: 0.7; }
 .app-credits.is-last .credits-logo { width: 48px; height: 48px; opacity: 0.9; }
 .app-credits .credits-text { max-width: 460px; }

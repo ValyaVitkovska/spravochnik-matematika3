@@ -1,6 +1,6 @@
 // Математически справочник — Service Worker
 // Версия на кеша — увеличи при промяна на файловете
-const CACHE_NAME = 'math-handbook-v16';
+const CACHE_NAME = 'math-handbook-v17';
 
 // Файлове за кеширане при инсталация
 const PRECACHE_URLS = [

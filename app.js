@@ -7720,20 +7720,40 @@ function renderApp() {
     searchArea.style.display = (state.view === 'home') ? 'block' : 'none';
   }
 
-  // Долна лента: на всяка страница само малкото лого; авторският текст — само на ПОСЛЕДНАТА страница
+  // Долна лента:
+  //  • начална страница — без лого
+  //  • последна страница — лого + авторски текст
+  //  • всички останали — логото е БУТОН към началото на текущия раздел (клас)
   const credits = document.getElementById('app-credits');
   if (credits) {
+    const onHome = (state.view === 'home');
     const onLastPage = (state.view === 'subtopic' && state.subtopicId === LAST_PAGE_ID);
-    if (onLastPage) {
-      credits.innerHTML =
-        `<img class="credits-logo" src="./icons/logo-mark.png" alt="">` +
-        `<div class="credits-text"><span class="copyright">© Валя Витковска, 2026</span><br>` +
-        `Авторска идея, методическа разработка, редакция и проверка: Валя Витковска.<br>` +
-        `Създадено с помощта на AI инструменти.</div>`;
-      credits.classList.add('is-last');
-    } else {
-      credits.innerHTML = `<img class="credits-logo" src="./icons/logo-mark.png" alt="Интерактивна математика">`;
+
+    // накъде сочи бутонът: към страницата на текущия клас, иначе към началото
+    const target = state.gradeKey
+      ? `goToGrade('${state.gradeKey}')`
+      : `goHome()`;
+    const gradeNum = state.gradeKey ? state.gradeKey.replace('grade', '') : '';
+    const tip = state.gradeKey ? `Към началото на ${gradeNum}. клас` : 'Към началната страница';
+
+    if (onHome) {
+      credits.innerHTML = '';
       credits.classList.remove('is-last');
+      credits.style.display = 'none';
+    } else {
+      credits.style.display = '';
+      const logoBtn = `<button type="button" class="credits-logo-btn" title="${tip}" aria-label="${tip}" onclick="${target}">` +
+        `<img class="credits-logo" src="./icons/logo-mark.png" alt="${tip}"></button>`;
+      if (onLastPage) {
+        credits.innerHTML = logoBtn +
+          `<div class="credits-text"><span class="copyright">© Валя Витковска, 2026</span><br>` +
+          `Авторска идея, методическа разработка, редакция и проверка: Валя Витковска.<br>` +
+          `Създадено с помощта на AI инструменти.</div>`;
+        credits.classList.add('is-last');
+      } else {
+        credits.innerHTML = logoBtn;
+        credits.classList.remove('is-last');
+      }
     }
   }
 
