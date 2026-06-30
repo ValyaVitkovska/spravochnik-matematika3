@@ -456,6 +456,7 @@ const CONTENT = {
       { label: 'Правило за събиране (две групи)', tex: 'N = m + n' },
       { label: 'Няколко несъвместими групи', tex: 'N = n_1 + n_2 + \\ldots + n_k' }
     ],
+    drawing: { interactive: 'add-rule', params: { m:3, n:4 }, caption: 'Правило за събиране: когато изборите са несъвместими (ИЛИ A, ИЛИ B) — броят е m + n.' },
     algorithm: [
       'Раздели задачата на отделни случаи (групи).',
       'Увери се, че групите са <b>несъвместими</b> (не се припокриват).',
@@ -491,6 +492,7 @@ const CONTENT = {
       { label: 'Правило за умножение (две стъпки)', tex: 'N = m \\cdot n' },
       { label: 'Няколко последователни стъпки', tex: 'N = n_1 \\cdot n_2 \\cdot \\ldots \\cdot n_k' }
     ],
+    drawing: { interactive: 'mult-rule', params: { m:3, n:4 }, caption: 'Правило за умножение: за всеки от m първи избора има n втори (И A, И B) — броят е m·n.' },
     algorithm: [
       'Раздели избора на последователни стъпки.',
       'Преброй възможностите на всяка стъпка.',
@@ -570,7 +572,7 @@ const CONTENT = {
       { label: 'Брой вариации без повторение', tex: 'V_n^k = \\dfrac{n!}{(n-k)!}' },
       { label: 'Разгърнат вид', tex: 'V_n^k = n(n-1)(n-2)\\cdots(n-k+1)' }
     ],
-    drawing: { interactive: 'combinatorics', params: { mode:'A', n:5, k:2 }, caption: 'Вариации Aₙᵏ — избор на k от n, при който редът има значение.' },
+    drawing: { interactive: 'combinatorics', params: { mode:'V', n:4, k:2 }, caption: 'Вариации Vₙᵏ — наредени избори на k от n. Виж как (1,2) и (2,1) се броят различно.' },
     algorithm: [
       'Установи, че се избира част от елементите (k от n).',
       'Установи, че редът е важен.',
@@ -651,7 +653,7 @@ const CONTENT = {
       { label: 'Вариации', tex: 'V_n^k = \\dfrac{n!}{(n-k)!}' },
       { label: 'Комбинации', tex: 'C_n^k = \\dfrac{n!}{k!(n-k)!}' }
     ],
-    drawing: { interactive: 'combinatorics', params: { mode:'C', n:5, k:3 }, caption: 'Превключи P, A, C при същите n и k и сравни стойностите и значението на реда.' },
+    drawing: { interactive: 'combinatorics', params: { mode:'C', n:4, k:2 }, caption: 'Превключи P, V, C при същите n, k и сравни подрежданията: при C няма стрелки, защото редът е без значение.' },
     algorithm: [
       'Запитай се: важен ли е редът?',
       'Ако ДА и използваме всички елементи → пермутации.',
@@ -8505,6 +8507,8 @@ function initInteractiveWidgets() {
     else if (type === 'regular-polygon') initPolygonWidget(el, params);
     else if (type === 'distance-coord') initDistanceWidget(el, params);
     else if (type === 'combinatorics') initCombinatoricsWidget(el, params);
+    else if (type === 'mult-rule') initMultRuleWidget(el, params);
+    else if (type === 'add-rule') initAddRuleWidget(el, params);
     else if (type === 'sqrt-numberline') initSqrtNumberLineWidget(el, params);
     else if (type === 'vector-relations') initVectorRelWidget(el, params);
     else if (type === 'circle-basics') initCircleBasicsWidget(el, params);
@@ -9461,44 +9465,156 @@ function initDistanceWidget(el, p) {
 // ============================================================
 function initCombinatoricsWidget(el, p) {
   let n = p.n ?? 4, k = p.k ?? 2;
-  let mode = p.mode ?? 'C'; // P | A | C
+  let mode = p.mode ?? 'C'; // P (пермутации) | V (вариации) | C (комбинации)
+  if (mode === 'A') mode = 'V';   // съвместимост със стара нотация
+  const colors = ['#4f6ef7','#e84393','#10b981','#f59e0b','#8b5cf6','#0ea5e9','#ef4444','#14b8a6'];
   el.innerHTML = `<div class="iw-controls">
       <div class="iw-controls-2col" style="grid-template-columns:1fr 1fr 1fr;">
-        <label style="flex-direction:row;gap:5px;align-items:center;"><input type="radio" data-m="P" ${mode==='P'?'checked':''} style="width:auto;">Пₙ</label>
-        <label style="flex-direction:row;gap:5px;align-items:center;"><input type="radio" data-m="A" ${mode==='A'?'checked':''} style="width:auto;">Aₙᵏ</label>
-        <label style="flex-direction:row;gap:5px;align-items:center;"><input type="radio" data-m="C" ${mode==='C'?'checked':''} style="width:auto;">Cₙᵏ</label>
+        <label style="flex-direction:row;gap:5px;align-items:center;"><input type="radio" data-m="P" ${mode==='P'?'checked':''} style="width:auto;">Pₙ <span style="font-weight:400;color:var(--text-muted);font-size:11px;">пермут.</span></label>
+        <label style="flex-direction:row;gap:5px;align-items:center;"><input type="radio" data-m="V" ${mode==='V'?'checked':''} style="width:auto;">Vₙᵏ <span style="font-weight:400;color:var(--text-muted);font-size:11px;">вариации</span></label>
+        <label style="flex-direction:row;gap:5px;align-items:center;"><input type="radio" data-m="C" ${mode==='C'?'checked':''} style="width:auto;">Cₙᵏ <span style="font-weight:400;color:var(--text-muted);font-size:11px;">комбин.</span></label>
       </div>
       <div class="iw-controls-2col">
-        <label>n = <span class="iw-val" data-v="n">${n}</span><input type="range" min="1" max="8" step="1" value="${n}" data-k="n"></label>
-        <label data-kc>k = <span class="iw-val" data-v="k">${k}</span><input type="range" min="0" max="8" step="1" value="${k}" data-k="k"></label>
+        <label>n = <span class="iw-val" data-v="n">${n}</span><input type="range" min="1" max="6" step="1" value="${n}" data-k="n"></label>
+        <label data-kc>k = <span class="iw-val" data-v="k">${k}</span><input type="range" min="1" max="6" step="1" value="${k}" data-k="k"></label>
       </div></div>
-    <svg viewBox="0 0 320 120" class="iw-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="iw-arrangements" style="display:flex;flex-wrap:wrap;gap:7px;justify-content:center;padding:10px;background:var(--bg-secondary);border-radius:8px;min-height:60px;"></div>
     <div class="iw-readout"></div>`;
-  const svg = el.querySelector('svg'), readout = el.querySelector('.iw-readout');
+  const box = el.querySelector('.iw-arrangements'), readout = el.querySelector('.iw-readout');
   function fact(m){let r=1;for(let i=2;i<=m;i++)r*=i;return r;}
+
+  // генериране на подрежданията
+  function permutations(arr){
+    if(arr.length<=1) return [arr];
+    const res=[];
+    arr.forEach((x,i)=>{const rest=arr.slice(0,i).concat(arr.slice(i+1));permutations(rest).forEach(pm=>res.push([x,...pm]));});
+    return res;
+  }
+  function variations(arr,kk){ // наредени избори (редът има значение)
+    if(kk===0) return [[]];
+    const res=[];
+    arr.forEach((x,i)=>{const rest=arr.slice(0,i).concat(arr.slice(i+1));variations(rest,kk-1).forEach(v=>res.push([x,...v]));});
+    return res;
+  }
+  function combinations(arr,kk){ // ненаредени избори
+    if(kk===0) return [[]];
+    if(arr.length<kk) return [];
+    const [first,...rest]=arr;
+    const withF=combinations(rest,kk-1).map(c=>[first,...c]);
+    const without=combinations(rest,kk);
+    return withF.concat(without);
+  }
+
+  function ball(idx,size){
+    const r=size||13;
+    return `<span style="display:inline-flex;align-items:center;justify-content:center;width:${r*2}px;height:${r*2}px;border-radius:50%;background:${colors[idx%8]};color:#fff;font-size:${r-1}px;font-weight:700;">${idx+1}</span>`;
+  }
+  function arrangementRow(items, ordered){
+    // ordered=true → подредени в ред (със стрелки/позиции); false → група без ред
+    const balls = items.map(i=>ball(i)).join(ordered?'<span style="color:var(--text-muted);margin:0 1px;">›</span>':'');
+    const bg = ordered ? '' : 'background:#4f6ef711;border:1px dashed #4f6ef7;border-radius:18px;';
+    return `<div style="display:inline-flex;align-items:center;gap:2px;padding:3px 6px;${bg}">${balls}</div>`;
+  }
+
   function draw(){
     if(k>n)k=n;
     el.querySelector('input[data-k="k"]').value=k;
-    // визуализация: n цветни топчета, избрани k
-    let s='';
-    const colors=['#4f6ef7','#e84393','#10b981','#f59e0b','#8b5cf6','#0ea5e9','#ef4444','#14b8a6'];
-    for(let i=0;i<n;i++){
-      const x=24+i*36, sel=(mode!=='P'&&i<k);
-      s+=`<circle cx="${x}" cy="50" r="14" fill="${colors[i%8]}" opacity="${sel?1:0.35}" stroke="${sel?'#1a1f2e':'none'}" stroke-width="2"/>`;
-      s+=`<text x="${x}" y="55" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">${i+1}</text>`;
+    const base=[];for(let i=0;i<n;i++)base.push(i);
+    let list, val, formula, ordered=true, note='';
+    if(mode==='P'){
+      list=permutations(base); val=fact(n);
+      formula=`Pₙ = n! = ${n}! = <b>${val}</b>`;
+      note='Всички подреждания на n-те обекта. Редът е важен, всеки обект се ползва веднъж.';
+    } else if(mode==='V'){
+      list=variations(base,k); val=fact(n)/fact(n-k);
+      formula=`Vₙᵏ = n!/(n−k)! = ${n}!/${n-k}! = <b>${val}</b>`;
+      note='Наредени избори на k от n — (1,2) и (2,1) се броят РАЗЛИЧНО.';
+    } else {
+      list=combinations(base,k); val=fact(n)/(fact(k)*fact(n-k)); ordered=false;
+      formula=`Cₙᵏ = n!/(k!(n−k)!) = <b>${val}</b>`;
+      note='Ненаредени избори на k от n — {1,2} и {2,1} са ЕДНО И СЪЩО (затова няма стрелки).';
     }
-    svg.innerHTML=s;
-    let val, formula;
-    if(mode==='P'){ val=fact(n); formula=`Pₙ = n! = ${n}! = <b>${val}</b>`; }
-    else if(mode==='A'){ val=fact(n)/fact(n-k); formula=`Aₙᵏ = n!/(n−k)! = ${n}!/${n-k}! = <b>${val}</b> (наредени, без повторение)`; }
-    else { val=fact(n)/(fact(k)*fact(n-k)); formula=`Cₙᵏ = n!/(k!(n−k)!) = <b>${val}</b> (без значение на реда)`; }
-    readout.innerHTML=formula;
+    // показваме до 24 подреждания
+    const LIMIT=24;
+    let html=list.slice(0,LIMIT).map(it=>arrangementRow(it,ordered)).join('');
+    if(list.length>LIMIT) html+=`<div style="display:flex;align-items:center;color:var(--text-muted);font-weight:700;font-size:14px;padding:0 6px;">… +${list.length-LIMIT}</div>`;
+    box.innerHTML=html;
+    readout.innerHTML=`${formula} възможности<br><span style="font-size:11px;">${note}</span>`;
     el.querySelector('[data-v="n"]').textContent=n;
     el.querySelector('[data-v="k"]').textContent=k;
     el.querySelector('[data-kc]').style.display=mode==='P'?'none':'flex';
   }
   el.querySelectorAll('input[type=radio]').forEach(r=>r.addEventListener('change',e=>{if(e.target.checked){mode=e.target.dataset.m;draw();}}));
   el.querySelectorAll('input[type=range]').forEach(inp=>inp.addEventListener('input',e=>{if(e.target.dataset.k==='n')n=parseInt(e.target.value);else k=parseInt(e.target.value);draw();}));
+  draw();
+}
+
+// ============================================================
+// ПРАВИЛО ЗА УМНОЖЕНИЕ — m·n чрез дърво/решетка
+// ============================================================
+function initMultRuleWidget(el, p) {
+  let m = p.m ?? 3, nn = p.n ?? 4;
+  const C1=['#4f6ef7','#e84393','#10b981','#f59e0b','#8b5cf6'];
+  el.innerHTML=`<div class="iw-controls iw-controls-2col">
+      <label>първи избор: m = <span class="iw-val" data-v="m">${m}</span><input type="range" min="1" max="5" step="1" value="${m}" data-k="m"></label>
+      <label>втори избор: n = <span class="iw-val" data-v="n">${nn}</span><input type="range" min="1" max="6" step="1" value="${nn}" data-k="n"></label>
+    </div>
+    <svg viewBox="0 0 320 220" class="iw-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="iw-readout"></div>`;
+  const svg=el.querySelector('svg'),readout=el.querySelector('.iw-readout');
+  function draw(){
+    const W=320,H=220, rootX=30, rootY=H/2;
+    let s=`<circle cx="${rootX}" cy="${rootY}" r="10" fill="#1a1f2e"/><text x="${rootX}" y="${rootY+4}" font-size="10" fill="#fff" text-anchor="middle">A</text>`;
+    const c1x=120, gap1=(H-30)/m;
+    for(let i=0;i<m;i++){
+      const y1=20+gap1*i+gap1/2;
+      s+=`<line x1="${rootX+10}" y1="${rootY}" x2="${c1x-12}" y2="${y1}" stroke="${C1[i%5]}" stroke-width="1.6"/>`;
+      s+=`<circle cx="${c1x}" cy="${y1}" r="11" fill="${C1[i%5]}"/><text x="${c1x}" y="${y1+4}" font-size="10" fill="#fff" text-anchor="middle">${i+1}</text>`;
+      // втори избор
+      const c2x=250, gap2=gap1/nn;
+      for(let j=0;j<nn;j++){
+        const y2=20+gap1*i+gap2*j+gap2/2;
+        s+=`<line x1="${c1x+11}" y1="${y1}" x2="${c2x-8}" y2="${y2}" stroke="${C1[i%5]}" stroke-width="0.8" opacity="0.6"/>`;
+        s+=`<circle cx="${c2x}" cy="${y2}" r="6" fill="#94a3b8"/>`;
+      }
+    }
+    svg.innerHTML=s;
+    readout.innerHTML=`Правило за <b>умножение</b> (И…, И…): за всеки от <b>${m}</b> първи избора има <b>${nn}</b> втори.<br>Общо = m·n = ${m}·${nn} = <b>${m*nn}</b> възможности.`;
+    el.querySelector('[data-v="m"]').textContent=m;
+    el.querySelector('[data-v="n"]').textContent=nn;
+  }
+  el.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',e=>{if(e.target.dataset.k==='m')m=parseInt(e.target.value);else nn=parseInt(e.target.value);draw();}));
+  draw();
+}
+
+// ============================================================
+// ПРАВИЛО ЗА СЪБИРАНЕ — m + n чрез две несъвместими групи
+// ============================================================
+function initAddRuleWidget(el, p) {
+  let m = p.m ?? 3, nn = p.n ?? 4;
+  el.innerHTML=`<div class="iw-controls iw-controls-2col">
+      <label>група A: m = <span class="iw-val" data-v="m">${m}</span><input type="range" min="1" max="7" step="1" value="${m}" data-k="m"></label>
+      <label>група B: n = <span class="iw-val" data-v="n">${nn}</span><input type="range" min="1" max="7" step="1" value="${nn}" data-k="n"></label>
+    </div>
+    <svg viewBox="0 0 320 160" class="iw-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="iw-readout"></div>`;
+  const svg=el.querySelector('svg'),readout=el.querySelector('.iw-readout');
+  function draw(){
+    let s='';
+    // група A (синя)
+    s+=`<rect x="8" y="14" width="150" height="132" rx="10" fill="#4f6ef711" stroke="#4f6ef7" stroke-width="1.5"/>`;
+    s+=`<text x="83" y="32" font-size="12" font-weight="700" fill="#4f6ef7" text-anchor="middle">Група A (${m})</text>`;
+    for(let i=0;i<m;i++){const col=i%4,row=Math.floor(i/4);s+=`<circle cx="${30+col*32}" cy="${56+row*30}" r="11" fill="#4f6ef7"/><text x="${30+col*32}" y="${60+row*30}" font-size="10" fill="#fff" text-anchor="middle">${i+1}</text>`;}
+    // група B (розова)
+    s+=`<rect x="162" y="14" width="150" height="132" rx="10" fill="#e8439311" stroke="#e84393" stroke-width="1.5"/>`;
+    s+=`<text x="237" y="32" font-size="12" font-weight="700" fill="#e84393" text-anchor="middle">Група B (${nn})</text>`;
+    for(let i=0;i<nn;i++){const col=i%4,row=Math.floor(i/4);s+=`<circle cx="${184+col*32}" cy="${56+row*30}" r="11" fill="#e84393"/><text x="${184+col*32}" y="${60+row*30}" font-size="10" fill="#fff" text-anchor="middle">${i+1}</text>`;}
+    svg.innerHTML=s;
+    readout.innerHTML=`Правило за <b>събиране</b> (ИЛИ…, ИЛИ…): изборите са <b>несъвместими</b> (не могат заедно).<br>Общо = m + n = ${m} + ${nn} = <b>${m+nn}</b> възможности.`;
+    el.querySelector('[data-v="m"]').textContent=m;
+    el.querySelector('[data-v="n"]').textContent=nn;
+  }
+  el.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',e=>{if(e.target.dataset.k==='m')m=parseInt(e.target.value);else nn=parseInt(e.target.value);draw();}));
   draw();
 }
 
