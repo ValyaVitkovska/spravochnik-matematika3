@@ -7720,6 +7720,24 @@ function renderApp() {
     searchArea.style.display = (state.view === 'home') ? 'block' : 'none';
   }
 
+  // Изображение-герой с текст върху него — само на началната страница, най-горе
+  const banner = document.getElementById('home-banner');
+  if (banner) {
+    if (state.view === 'home') {
+      banner.innerHTML =
+        `<div class="home-banner-inner">` +
+        `<img class="home-cover" src="./icons/home-hero.jpg" alt="Интерактивна математика — справочник" loading="eager">` +
+        `<div class="home-cover-text">` +
+        `<h1>Математически справочник 8.–12. клас</h1>` +
+        `<p>Формули, теореми, чертежи, графики и типови задачи</p>` +
+        `</div></div>`;
+      banner.style.display = 'block';
+    } else {
+      banner.innerHTML = '';
+      banner.style.display = 'none';
+    }
+  }
+
   // Долна лента:
   //  • начална страница — без лого
   //  • последна страница — лого + авторски текст
@@ -7784,12 +7802,6 @@ function renderHome(main) {
   ];
 
   let html = `
-    <img class="home-cover" src="./icons/home-hero.jpg" alt="Интерактивна математика — справочник" loading="eager">
-    <div class="home-hero">
-      <h1>Математически справочник<br>8.–12. клас</h1>
-      <p>Формули, теореми, чертежи, графики и типови задачи</p>
-    </div>
-
     <div class="hint-box">
       <strong>Как да използвам справочника?</strong><br>
       Избери клас → тема → подтема. Всяка подтема съдържа определения, формули, алгоритъм, типова задача и мини проверка. Формулите могат да се копират с бутона 📋.

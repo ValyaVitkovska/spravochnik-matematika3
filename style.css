@@ -1153,6 +1153,49 @@ body {
   margin: 36px auto 8px;
 }
 
+/* Изображение-герой с текст върху него (най-горе на началната страница) */
+#home-banner { max-width: 680px; margin: 0 auto; padding: 12px 16px 0; }
+.home-banner-inner {
+  position: relative;
+  border-radius: var(--radius-xl, 20px);
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.15);
+}
+.home-banner-inner .home-cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.home-cover-text {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 20px 22px 18px;
+  color: #fff;
+  background: linear-gradient(to top, rgba(10, 20, 45, 0.92) 0%, rgba(10, 20, 45, 0.72) 45%, rgba(10, 20, 45, 0) 100%);
+}
+.home-cover-text h1 {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0 0 6px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+.home-cover-text p {
+  font-size: 14px;
+  opacity: 0.95;
+  line-height: 1.4;
+  margin: 0;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+@media (max-width: 600px) {
+  .home-cover-text { padding: 14px 16px 12px; }
+  .home-cover-text h1 { font-size: 18px; }
+  .home-cover-text p { font-size: 12px; }
+}
+
 /* Изображение най-горе на началната страница */
 .home-cover {
   display: block;
